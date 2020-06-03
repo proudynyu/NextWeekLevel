@@ -2,12 +2,18 @@ const statesElement = document.querySelector('select[name=state]');
 const cityElement = document.querySelector('select[name=city]');
 const hiddenState = document.querySelector('input[name=state-hidden]');
 const hiddenCity = document.querySelector('input[name=city-hidden]');
+const itensCollect = document.querySelectorAll('.itens-grid li');
+
+let selectedItens = [];
 
 populateUf();
 
 statesElement.addEventListener('change', (e) => {
     const stateValue = e.target.value;
     hiddenState.value = e.target.options[e.target.selectedIndex].text;
+    
+    cityElement.innerHTML = "";
+    cityElement.disabled = true;
 
     fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${stateValue}/municipios`)
     .then( res => res.json() )
@@ -20,6 +26,12 @@ statesElement.addEventListener('change', (e) => {
         })
     })
     cityElement.disabled = false;
+});
+
+const hiddenItens = document.querySelector('input[name=itens]');
+
+itensCollect.forEach( item => {
+    item.addEventListener('click', handleSelectItem);
 })
 
 function populateUf() {
@@ -35,4 +47,24 @@ function populateUf() {
         })
     })
     .catch(err => console.log(err));
+}
+
+function handleSelectItem(e) {
+    const itemLi = e.target;
+
+    itemLi.classList.toggle('selected');
+
+    const itemId = itemLi.dataset.id;
+
+    const alreadySelected = selectedItens.findIndex( item => (
+        item === itemId
+    ));
+
+    if (alreadySelected >= 0) {
+        const filteredItens = selectedItens.filter( item => item != itemId);
+        selectedItens = filteredItens;
+    } else {
+        selectedItens.push(itemId);
+    }
+    hiddenItens.value = selectedItens;
 }

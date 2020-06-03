@@ -6,6 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Ubuntu:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/style.css" type="text/css">
     <link rel="stylesheet" href="./styles/home.css">
+    <link rel="stylesheet" href="./styles/modal.css">
     <link rel="stylesheet" href="./styles/responsive.css">
     <title>Ecoleta</title>
 </head>
@@ -14,7 +15,7 @@
         <div class="content">
             <header>
                 <img src="./assets/logo.svg" alt="Logo da Ecoleta">
-                <a href="http://www.google.com.br">
+                <a href="/create-point.html">
                     <span></span>
                     Cadastre um ponto de coleta
                 </a>
@@ -29,5 +30,24 @@
             </main>
         </div>
     </div>
+
+    <div id="modal" class="hidden">
+        <div class="content">
+            <div class="header">
+                <h1>Pontos de coleta</h1>
+                <a href="#">Fechar</a>
+            </div>
+            <form action="">
+                <label for="search">Cidade</label>
+                <div class="search field">
+                    <input type="text" name="search" placeholder="Digite a cidade">
+                    <button>
+                        <img src="./assets/search.svg" alt="">
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="./scripts/index.js"></script>
 </body>
 </html>
