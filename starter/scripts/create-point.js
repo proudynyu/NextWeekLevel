@@ -27,7 +27,11 @@ function populateUf() {
     .then( res => res.json() )
     .then( data => {
         data.forEach(state => {
-            statesElement.innerHTML += `<option value="${state.id}">${state.sigla}</option>`;
+            const stateOption = document.createElement('option');
+            stateOption.value = state.id;
+            stateOption.innerText = state.sigla
+            statesElement.append(stateOption);
+            // statesElement.innerHTML += `<option value="${state.id}">${state.sigla}</option>`;
         })
     })
     .catch(err => console.log(err));
