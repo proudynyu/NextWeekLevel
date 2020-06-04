@@ -1,6 +1,6 @@
 #page-home {
     height: 100vh;
-    background-image: url('./assets/home-background.svg');
+    background-image: url('../assets/home-background.svg');
     background-repeat: no-repeat;
     background-position: 35vw 15vh;
 }
