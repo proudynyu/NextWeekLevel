@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+    {% set bodyId = "page-search-results" %}
+
+    {% block styles %}
+        <link rel="stylesheet" href="./styles/search-results.css" type="text/css">
+    {% endblock %}
+
+    {% block title %}
+        <title>Create Point</title>
+    {% endblock %}
+
+        {% block content %}
+            {% include "partials/page-header.html" %}
+            
+            <main>
+                <h3>
+                    <strong>{{ total }}</strong> encontrados
+                </h3>
+                <div class="cards">
+
+                    {% for place in places %}
+                    <div class="card">
+                        <img src="{{ place.image }}" alt="Colectoria">
+                        <h1>{{ place.name }}</h1>
+                        <h3>{{ place.itens }}</h3>
+                        <p>
+                            {{ place.state }}, {{ place.city }} </br>
+                            {{ place.address }} </br>
+                            {{ place.address2 }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                    
+                </div>
+            </main>
+        {% endblock %}
