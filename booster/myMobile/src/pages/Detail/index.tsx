@@ -4,7 +4,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import { SvgUri } from 'react-native-svg'
 import { Feather } from '@expo/vector-icons';
 import MapView from 'react-native-maps';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 
 interface Itens {
@@ -13,9 +13,29 @@ interface Itens {
     image_url: string
 }
 
+interface Params {
+    city: string,
+    uf: string
+}
+
+interface Points {
+    id: number,
+    name: string,
+    email: string,
+    whatsapp: string,
+    image: string,
+    latitude: number,
+    longitude: number,
+}
+
 const Detail = () => {
     const navigator = useNavigation();
     const [itens, setItens] = useState<Itens[]>([]);
+    const [points, setPoints] = useState<Points[]>([]);
+    const [selectedItens, setSelectedItens] = useState<number[]>([]);
+    const route = useRoute();
+
+    const routeParams = route.params as Params;
 
     useEffect(() => {
         api.get('itens')
@@ -24,12 +44,35 @@ const Detail = () => {
             })
     }, []);
 
+    useEffect(() => {
+        api.get('points', {
+            params: {
+                city: routeParams.city,
+                uf: routeParams.uf,
+                itens: String(selectedItens.join(','))
+            }
+        })
+        .then( response => {
+            setPoints(response.data);
+        });
+    }, [selectedItens])
+
     function handleBack(){
         navigator.goBack();
     };
     function handleCreate(){
         navigator.navigate('Points');
     };
+    function handleSelectedItem(id: number){
+        const alreadySelect = selectedItens.findIndex( item => item === id);
+        if (alreadySelect >= 0) {
+            const filteredItens = selectedItens.filter(item => item !== id);
+            setSelectedItens(filteredItens);
+        } else {
+            setSelectedItens([...selectedItens, id]);
+        }
+    };
+    
     return (
         <ScrollView>
             <View style={styles.detailContainer}>
@@ -68,7 +111,13 @@ const Detail = () => {
                                 const splitUrl = item.image_url.split('/');
                                 const url = splitUrl.splice(splitUrl.length - 2).join('/')
                                 return (
-                                <TouchableOpacity key={item.id} style={styles.touchButton} onPress={() => {}}>
+                                <TouchableOpacity 
+                                    key={item.id} 
+                                    style={[
+                                        styles.touchButton,
+                                        selectedItens.includes(item.id) ? styles.selectedItem : {}
+                                    ]} 
+                                    onPress={(id) => handleSelectedItem(item.id)}>
                                     <SvgUri width={45} height={45} uri={`http://192.168.0.60:3333/${url}`}/>
                                     <Text style={styles.buttonText}>{item.name}</Text>
                                 </TouchableOpacity>
@@ -137,6 +186,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         marginLeft: 6,
         padding: 5,
+    },
+    selectedItem: {
+        borderColor: '#34CB79',
+        borderWidth: 2,
     },
     buttonText: {
         color: '#2b2b2b',

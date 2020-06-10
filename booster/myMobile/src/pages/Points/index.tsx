@@ -22,7 +22,9 @@ interface DataObj {
     whatsapp: string,
     uf: string,
     city: string,
-    itens: number[]
+    itens: number[],
+    latitude: number,
+    longitude: number,
 }
 
 interface Itens {
@@ -35,7 +37,8 @@ const Points = () => {
     const navigator = useNavigation();
     const [data, setData] = useState<DataObj>({} as DataObj);
     const [itens, setItens] = useState<Itens[]>([])
-    const [initialPos, setInitialPos] = useState<[number, number]>([-23.1310627, -46.5672627]);
+    const [initialPos, setInitialPos] = useState<[number, number]>([0, 0]);
+    const [selectedItem, setSelectedItem] = useState<number[]>([]);
 
     useEffect(() => {
         api.get('itens')
@@ -48,12 +51,17 @@ const Points = () => {
         (async () => {
             const { status } = await Location.requestPermissionsAsync(); 
             if (status !== 'granted') {
-                Alert.alert('Ops! Precisamos da sua permissão para obter a localização');
+                Alert.alert('Ops! Precisamos da sua autorização para saber a localização.');
                 return
             }
-            const local = await Location.getCurrentPositionAsync();
+            const deviceEnabled = await Location.hasServicesEnabledAsync();
+            if (!deviceEnabled) return;
+            const local = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.High,
+                enableHighAccuracy: true,
+            });
             const { latitude, longitude } = local.coords;
-            setInitialPos([latitude, longitude]);
+            setInitialPos([ latitude, longitude ]);
         })();
     }, [])
 
@@ -62,13 +70,28 @@ const Points = () => {
     };
 
     function handleCreatePoint(){
-
+        setData({
+            ...data,
+            itens: [...selectedItem],
+        });
+        console.log(data);
     };
 
     function handlePress(press: MapEvent){
         const { latitude, longitude } = press.nativeEvent.coordinate;
         setInitialPos([latitude, longitude]);
     }
+
+    function handleSelectedItem(id: number){
+        const alreadySelected = selectedItem.findIndex( item => item === id);
+
+        if (alreadySelected >= 0) {
+            const filteredItens = selectedItem.filter( item => item !== id);
+            setSelectedItem(filteredItens);
+        } else {
+            setSelectedItem([...selectedItem, id]);
+        }
+    };
 
     return (
         <ScrollView>
@@ -147,7 +170,13 @@ const Points = () => {
                                 const splitUrl = item.image_url.split('/');
                                 const url = splitUrl.splice(splitUrl.length - 2).join('/')
                                 return (
-                                    <TouchableOpacity key={item.id} style={styles.touchButton} onPress={() => {}}>
+                                    <TouchableOpacity 
+                                        key={item.id} 
+                                        style={[
+                                            styles.touchButton, 
+                                            selectedItem.includes(item.id) ? styles.selectedItem : {}
+                                        ]} 
+                                        onPress={ id => handleSelectedItem(item.id)}>
                                         <SvgUri width={45} height={45} uri={`http://192.168.0.60:3333/${url}`}/>
                                         <Text style={styles.buttonText}>{item.name}</Text>
                                     </TouchableOpacity>
@@ -235,6 +264,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         marginLeft: 6,
         padding: 5,
+    },
+    selectedItem: {
+        borderColor: '#34CB79',
+        borderWidth: 2,
     },
     buttonText: {
         color: '#2b2b2b',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RectButton } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -11,11 +11,20 @@ import {
     TextInput
     } from 'react-native';
 
+interface DataObj {
+    city: string,
+    uf: string,
+}
+
 const Home = () => {
     const navigator = useNavigation();
+    const [data, setData] = useState<DataObj>({} as DataObj);
 
     function handleSearch() {
-        navigator.navigate('Detail')
+        navigator.navigate('Detail', {
+            city: data.city,
+            uf: data.uf
+        });
     };
 
     return (
@@ -35,8 +44,18 @@ const Home = () => {
             </View>
 
             <View style={styles.footer}>
-                <TextInput placeholder='Insira seu estado' style={styles.input} />
-                <TextInput placeholder='Insira sua cidade' style={styles.input} />
+                <TextInput
+                    value={data.uf}
+                    placeholder='Insira seu estado' 
+                    onChangeText={text => setData({...data, uf: text})}
+                    style={styles.input} 
+                />
+                <TextInput
+                    value={data.city} 
+                    placeholder='Insira sua cidade'
+                    onChangeText={text => setData({...data, city: text})} 
+                    style={styles.input} 
+                />
                 <RectButton style={styles.button} onPress={handleSearch} >
                     <View style={styles.buttonIcon}>
                         <Text><Feather name='arrow-right' size={22} color="#FFF"/></Text>
