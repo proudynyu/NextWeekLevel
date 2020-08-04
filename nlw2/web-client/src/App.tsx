@@ -1,11 +1,11 @@
 import React from 'react';
-import Landing from './pages/landing';
+import Router from './routes';
 
 import './assets/styles/global.css'
 
 const App: React.FC = () => {
   return (
-    <Landing />
+    <Router />
   );
 }
 
