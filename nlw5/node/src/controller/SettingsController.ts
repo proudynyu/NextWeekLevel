@@ -1,11 +1,12 @@
 import { Request, Response } from 'express'
 import { getCustomRepository } from 'typeorm'
 import { SettingsRepository } from '../repositories/SettingRepository'
+import { SettingsService } from '../services/SettingsService'
 
 export class SettingsController {
-  private settingRepository: SettingsRepository = getCustomRepository(
-    SettingsRepository
-  )
+  private settingRepository = getCustomRepository(SettingsRepository)
+
+  private settingsService = new SettingsService()
 
   async create(req: Request, res: Response) {
     const { username, chat } = req.body
@@ -18,8 +19,7 @@ export class SettingsController {
       if (settingAlreadyExists)
         res.status(400).json({ error: 'Setting already exists' })
 
-      const settings = this.settingRepository.create({ username, chat })
-      await this.settingRepository.save(settings)
+      const settings = await this.settingsService.create({ chat, username })
 
       return res.status(201).json(settings)
     } catch (e) {
