@@ -1,24 +1,18 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm'
 import { v4 } from 'uuid'
 
-@Entity('Settings')
-export class Settings {
+@Entity('Users')
+export class Users {
   @PrimaryColumn()
   id: string
 
   @Column()
-  username: string
-
-  @Column()
-  chat: boolean
-
-  @CreateDateColumn()
-  update_at: Date
-
+  email: string
+  
   @CreateDateColumn()
   create_at: Date
 
   constructor() {
-    if (!this.id) this.id = v4()
+    if(!this.id) this.id = v4()
   }
 }

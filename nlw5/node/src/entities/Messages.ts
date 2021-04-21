@@ -1,19 +1,20 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm'
 import { v4 } from 'uuid'
 
-@Entity('Settings')
-export class Settings {
+@Entity('Messages')
+export class Messages {
   @PrimaryColumn()
   id: string
 
   @Column()
-  username: string
+  admin_id: string
+
+  // Foreign Key
+  @Column()
+  user_id: string
 
   @Column()
-  chat: boolean
-
-  @CreateDateColumn()
-  update_at: Date
+  text: string
 
   @CreateDateColumn()
   create_at: Date
