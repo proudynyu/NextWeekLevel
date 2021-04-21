@@ -30,6 +30,16 @@ export class CreateConnections1619013980054 implements MigrationInterface {
             default: 'now()',
           },
         ],
+        foreignKeys: [
+          {
+            name: 'FKUser',
+            referencedTableName: 'Users',
+            referencedColumnNames: ['id'],
+            columnNames: ['user_id'],
+            onDelete: 'SET NULL',
+            onUpdate: 'SET NULL'
+          },
+        ],
       })
     )
   }
