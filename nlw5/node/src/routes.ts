@@ -1,19 +1,18 @@
 import { Router } from 'express'
+import { MessagesController } from './controller/MessagesController'
 import { SettingsController } from './controller/SettingsController'
+import { UserController } from './controller/UserController'
 
 const router = Router()
 const settingsController = new SettingsController()
+const messagesController = new MessagesController()
+const usersController = new UserController()
 
-router.get('/', (req, res) => res.json({ msg: 'hi' }))
-
-router.get('/settings', settingsController.index)
-router.get('/settings/:id', settingsController.showOne)
 router.post('/settings', settingsController.create)
-router.delete('/settings/:id', settingsController.delete)
 
-// router.get('/users', usersController.index)
-// router.get('/users/:id', usersController.showOne)
-// router.post('/users', usersController.create)
-// router.delete('/users/:id', usersController.delete)
+router.post('/users', usersController.create)
+
+router.post('/messages', messagesController.create)
+router.get('/messages/:user_id', messagesController.showByUser)
 
 export { router }
