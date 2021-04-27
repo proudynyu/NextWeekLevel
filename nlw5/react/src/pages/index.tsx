@@ -8,6 +8,8 @@ import { api } from "../services/api";
 import { convertDurationToTimeString } from "../utils/convertDurationToTimeString";
 
 import styles from "../styles/Home.module.scss";
+import { useContext } from "react";
+import { PlayerContext } from "../contexts/PlayerContext";
 
 type HomeProps = {
   latestEpisodes: Array<EpisodeProps>;
@@ -27,44 +29,35 @@ type EpisodeProps = {
 };
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
+  const { play } = useContext(PlayerContext);
   return (
     <div className={styles.homePage}>
       <section className={styles.latestEpisodes}>
         <h2>Ultimos lancamentos</h2>
 
         <ul>
-          {latestEpisodes.map(
-            ({
-              id,
-              thumbnail,
-              title,
-              // url,
-              members,
-              publishedAt,
-              durationAsString,
-            }) => (
-              <li key={id}>
-                <Image
-                  width={192}
-                  height={192}
-                  src={thumbnail}
-                  alt={title}
-                  objectFit="cover"
-                />
-                <div className={styles.episodeDetails}>
-                  <Link href={`/episodes/${id}`}>
-                    <a>{title}</a>
-                  </Link>
-                  <p>{members}</p>
-                  <span>{publishedAt}</span>
-                  <span>{durationAsString}</span>
-                </div>
-                <button type="button">
-                  <img src="/play-green.svg" alt="tocar episodio" />
-                </button>
-              </li>
-            )
-          )}
+          {latestEpisodes.map((episode) => (
+            <li key={episode.id}>
+              <Image
+                width={192}
+                height={192}
+                src={episode.thumbnail}
+                alt={episode.title}
+                objectFit="cover"
+              />
+              <div className={styles.episodeDetails}>
+                <Link href={`/episodes/${episode.id}`}>
+                  <a>{episode.title}</a>
+                </Link>
+                <p>{episode.members}</p>
+                <span>{episode.publishedAt}</span>
+                <span>{episode.durationAsString}</span>
+              </div>
+              <button type="button" onClick={() => play(episode)}>
+                <img src="/play-green.svg" alt="tocar episodio" />
+              </button>
+            </li>
+          ))}
         </ul>
       </section>
       <section className={styles.allEpisodes}>
