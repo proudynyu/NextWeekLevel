@@ -7,6 +7,8 @@ import Image from "next/image";
 import { api } from "../../services/api";
 import { convertDurationToTimeString } from "../../utils/convertDurationToTimeString";
 import styles from "./episode.module.scss";
+import { useContext } from "react";
+import { PlayerContext } from "../../contexts/PlayerContext";
 
 type Props = {
   episode: EpisodeProps;
@@ -25,6 +27,7 @@ type EpisodeProps = {
 };
 
 export default function Episode({ episode }: Props) {
+  const { play } = useContext(PlayerContext);
   return (
     <div className={styles.episodeContainer}>
       <section className={styles.episode}>
@@ -40,7 +43,7 @@ export default function Episode({ episode }: Props) {
             src={episode.thumbnail}
             objectFit="cover"
           />
-          <button type="button">
+          <button type="button" onClick={() => play(episode)}>
             <img src="/play.svg" alt="tocar episodio" />
           </button>
         </div>
