@@ -75,34 +75,27 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
           </thead>
           <tbody>
             {allEpisodes.map(
-              ({
-                id,
-                thumbnail,
-                title,
-                members,
-                publishedAt,
-                durationAsString,
-              }) => (
-                <tr key={id}>
+              ( episode ) => (
+                <tr key={episode.id}>
                   <td style={{ width: 72 }}>
                     <Image
                       width={120}
                       height={120}
-                      src={thumbnail}
-                      alt={title}
+                      src={episode.thumbnail}
+                      alt={episode.title}
                       objectFit="cover"
                     />
                   </td>
                   <td>
-                    <Link href={`/episodes/${id}`}>
-                      <a>{title}</a>
+                    <Link href={`/episodes/${episode.id}`}>
+                      <a>{episode.title}</a>
                     </Link>
                   </td>
-                  <td>{members}</td>
-                  <td style={{ width: 100 }}>{publishedAt}</td>
-                  <td>{durationAsString}</td>
+                  <td>{episode.members}</td>
+                  <td style={{ width: 100 }}>{episode.publishedAt}</td>
+                  <td>{episode.durationAsString}</td>
                   <td>
-                    <button type="button">
+                    <button type="button" onClick={() => play(episode)}>
                       <img src="play-green.svg" alt="tocar episodio" />
                     </button>
                   </td>

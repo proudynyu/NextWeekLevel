@@ -21,8 +21,9 @@ export function Player() {
 
   useEffect(() => {
     if (!audioRef.current) {
-      isPlaying ? audioRef.current.pause() : audioRef.current.play();
+      return;
     }
+    isPlaying ? audioRef.current.play() : audioRef.current.pause();
   }, [isPlaying]);
 
   return (
