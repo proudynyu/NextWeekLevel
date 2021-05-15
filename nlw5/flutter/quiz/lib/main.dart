@@ -1,6 +1,10 @@
+import 'package:DevQuiz/challenge/challenge_page.dart';
+// import 'package:DevQuiz/home/home_page.dart';
+// import 'package:DevQuiz/splash/splash_page.dart';
 import 'package:flutter/material.dart';
-import 'package:DevQuiz/core/app_widget.dart';
 
 void main() {
-  runApp(AppWidget());
+  runApp(MaterialApp(
+    home: ChallengePage(),
+  ));
 }

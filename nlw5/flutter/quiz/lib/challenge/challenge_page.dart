@@ -1,4 +1,5 @@
 import 'package:DevQuiz/challenge/widgets/question_indicator/question_indicator_widget.dart';
+import 'package:DevQuiz/challenge/widgets/quiz/quiz_widget.dart';
 import 'package:flutter/material.dart';
 
 class ChallengePage extends StatefulWidget {
@@ -12,7 +13,12 @@ class _ChallengePageState extends State<ChallengePage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
-        child: SafeArea(child: QuestionIndicatorWidget(), top: true),
-      ));
+        child: SafeArea(
+          child: QuestionIndicatorWidget(),
+          top: true
+        ),
+      ),
+      body: QuizWidget(title: 'O que o flutter faz',),
+    );
   }
 }
