@@ -3,6 +3,7 @@ import ptBR from "date-fns/locale/pt-BR";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import Head from "next/head";
 
 import { api } from "../../services/api";
 import { convertDurationToTimeString } from "../../utils/convertDurationToTimeString";
@@ -30,6 +31,9 @@ export default function Episode({ episode }: Props) {
   const { play } = useContext(PlayerContext);
   return (
     <div className={styles.episodeContainer}>
+      <Head>
+        <title>{episode.title}</title>
+      </Head>
       <section className={styles.episode}>
         <div className={styles.thumbnailContainer}>
           <Link href="/">
